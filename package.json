@@ -22,11 +22,6 @@
     "tslib": "^2.1.0"
   },
   "dependencies": {
-    "lodash": "^4.17.19",
     "tiny-invariant": "^1.1.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "ssh://git@github.com/thumbjive/minibus.git"
   }
 }
