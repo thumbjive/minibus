@@ -8,8 +8,10 @@
   "module": "dist/minibus.module.js",
   "unpkg": "dist/minibus.umd.js",
   "scripts": {
-    "build": "microbundle",
     "dev": "microbundle watch",
+    "clean": "rm -rf dist",
+    "build": "microbundle",
+    "prepublish": "npm run clean && npm run build",
     "test": "jest"
   },
   "devDependencies": {
