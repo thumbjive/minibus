@@ -1,17 +1,17 @@
-import invariant from 'tiny-invariant';
+import invariant from "tiny-invariant";
 
-type MinibusCallback = {
+export type MinibusCallback = {
   (...args: any[]): boolean | void;
   __runOnce?: boolean;
 };
 
-type MinibusUnsubscriber = { unsubscribe: () => void };
+export type MinibusUnsubscriber = { unsubscribe: () => void };
 
-interface MinibusEmitter {
+export interface MinibusEmitter {
   (channelName: string, ...args: any[]): void;
 }
 
-interface MinibusSubscriber {
+export interface MinibusSubscriber {
   (
     channelName: string,
     callback: MinibusCallback,
@@ -19,13 +19,13 @@ interface MinibusSubscriber {
   ): MinibusUnsubscriber;
 }
 
-type MinibusSubscriptionSet = {
+export type MinibusSubscriptionSet = {
   [index: string]: Set<MinibusCallback>;
 };
 
-type MinibusDeferredSet = Set<string>;
+export type MinibusDeferredSet = Set<string>;
 
-interface Minibus {
+export interface Minibus {
   emit: MinibusEmitter;
   defer: MinibusEmitter;
   subscribe: MinibusSubscriber;
@@ -69,7 +69,7 @@ export const createMinibus = (): Minibus => {
   const defer: MinibusEmitter = (channelName: string, ...args) => {
     invariant(
       args.length === 0,
-      'defer does not support passing extra arguments'
+      "defer does not support passing extra arguments"
     );
 
     __deferredEmitions.add(channelName);
@@ -85,7 +85,7 @@ export const createMinibus = (): Minibus => {
     callback: MinibusCallback
   ) => {
     return () => {
-      if (typeof __subscriptions[channelName] === 'undefined') {
+      if (typeof __subscriptions[channelName] === "undefined") {
         return;
       }
       return __subscriptions[channelName].delete(callback);
@@ -98,13 +98,13 @@ export const createMinibus = (): Minibus => {
     callback: MinibusCallback,
     once: boolean = false
   ): MinibusUnsubscriber => {
-    if (typeof __subscriptions[channelName] === 'undefined') {
+    if (typeof __subscriptions[channelName] === "undefined") {
       __subscriptions[channelName] = new Set();
     }
 
     invariant(
-      typeof callback === 'function',
-      'callback is not a valid function'
+      typeof callback === "function",
+      "callback is not a valid function"
     );
 
     // in case the emitter has been configured to support deferred calls
@@ -133,7 +133,7 @@ export const createMinibus = (): Minibus => {
 
   const isChannelEmpty = (channelName: string): boolean => {
     const channel = __subscriptions[channelName];
-    return typeof channel === 'undefined' || channel.size === 0;
+    return typeof channel === "undefined" || channel.size === 0;
   };
 
   return {
@@ -158,7 +158,7 @@ const __buses: { [index: string]: Minibus } = {};
  * Utility to check on runtime if an object is a Minibus instance or not
  */
 const isMinibus = (obj: any): boolean => {
-  if (typeof obj === 'undefined') {
+  if (typeof obj === "undefined") {
     return false;
   }
 
@@ -172,7 +172,7 @@ const isMinibus = (obj: any): boolean => {
 /**
  * Get or create named instance
  */
-export const getBus = (busName = 'global'): Minibus => {
+export const getBus = (busName = "global"): Minibus => {
   if (!isMinibus(__buses[busName])) {
     __buses[busName] = createMinibus();
   }
